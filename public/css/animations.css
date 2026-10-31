@@ -1,0 +1,115 @@
+/* ==========================================
+   ANIMAÇÃO DA LOGO FLUTUANTE (HERO)
+========================================== */
+#floating-hero-logo {
+    position: absolute;
+    transition: all 0.6s ease-in-out;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#floating-hero-logo img {
+    transition: all 0.6s ease-in-out;
+}
+
+/* Estado 0: Página Principal (Mobile e Desktop) */
+.logo-state-center {
+    top: 45%; 
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(0deg); 
+    background-color: transparent;
+    border: 4px solid transparent;
+    padding: 0;
+    box-shadow: 0px 0px 0px 0px rgba(0,0,0,1);
+    opacity: 1;
+}
+
+.logo-state-center img {
+    height: 6rem; 
+    width: auto;
+    max-width: 90vw;
+    object-fit: contain; 
+    filter: drop-shadow(4px 4px 0 rgba(0,0,0,1));
+}
+
+/* Estado 1: Outras Páginas (No Mobile apenas DESAPARECE) */
+.logo-state-corner {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-6deg) scale(0.5); 
+    opacity: 0; 
+    pointer-events: none;
+}
+
+/* Comportamento Desktop (A partir de 768px) */
+@media (min-width: 768px) {
+    .logo-state-center {
+        top: 48%;
+    }
+    .logo-state-center img {
+        height: 12rem; 
+        width: auto;
+        filter: drop-shadow(6px 6px 0 rgba(0,0,0,1));
+    }
+    
+    .logo-state-corner {
+        opacity: 1;
+        pointer-events: auto;
+        top: 45%;
+        left: 50%;
+        transform: translate(calc(-50% - 170px), calc(-50% - 200px)) rotate(-6deg) scale(1);
+        background-color: white;
+        border: 4px solid black;
+        padding: 0.5rem 1rem;
+        box-shadow: 4px 4px 0px 0px rgba(0,0,0,1);
+    }
+    .logo-state-corner img {
+        height: 3.5rem; 
+        width: auto;
+        filter: drop-shadow(2px 2px 0 rgba(0,0,0,1));
+    }
+}
+
+/* ==========================================
+   EFEITO DE FITA DE LUZ TÁTIL (MOBILE)
+========================================== */
+.touch-trail-segment {
+    position: absolute;
+    pointer-events: none;
+    z-index: 45;
+    transform-origin: 0 50%; 
+    display: flex;
+    align-items: center; 
+    height: 30px; 
+    margin-top: -15px; 
+}
+
+.touch-trail-inner {
+    width: 100%;
+    height: 6px; 
+    background-color: #ffffff; 
+    border-radius: 10px; 
+    box-shadow: 0 0 10px 4px #ff00ff, 0 0 20px 8px #ff00ff; 
+    animation: trailInnerFade 0.4s ease-out forwards;
+}
+
+@keyframes trailInnerFade {
+    0% { opacity: 1; transform: scaleY(1); }
+    100% { opacity: 0; transform: scaleY(0.1); } 
+}
+
+/* ==========================================
+   ANIMAÇÃO DO MARQUEE DE FUNDO
+========================================== */
+@keyframes bg-scroll {
+    0% { background-position: 0 0; }
+    100% { background-position: -1000px 0; }
+}
+.animate-bg-scroll {
+    width: 100%;
+    background-repeat: repeat-x; 
+    background-image: url('/assets/Blocos.png'); 
+    animation: bg-scroll 15s linear infinite;
+}

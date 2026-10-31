@@ -1,0 +1,25 @@
+{
+  "name": "entec-landing",
+  "version": "1.0.0",
+  "description": "Landing page oficial para a divulgação e inscrição nos torneios de **EA Sports FC 26** e **Mortal Kombat 11**, realizados durante a 14ª Edição do Encontro de Tecnologia (ENTEC) da UNINASSAU Campina Grande.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AugustoCGM/Entec_Main.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/AugustoCGM/Entec_Main/issues"
+  },
+  "homepage": "https://github.com/AugustoCGM/Entec_Main#readme",
+  "dependencies": {
+    "express": "^5.3.0"
+  }
+}
