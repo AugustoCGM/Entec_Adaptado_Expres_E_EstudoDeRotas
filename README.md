@@ -39,6 +39,7 @@ O código original foi refatorado para deixar de ser uma simples página estáti
         ├── fab.js          # Ações do botão flutuante
         └── script.js       # Carrossel, touch/swipe e troca de renders
 
+```
 
 ⚙️ Como Executar o Projeto
 Certifique-se de ter o Node.js instalado em sua máquina.
