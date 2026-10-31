@@ -1,39 +1,58 @@
-# 🎮 ENTEC 2026 - Campeonatos de E-Sports
+# ENTEC 2026 E-Sports - Servidor Express (Atividade AT2)
 
-Landing page oficial para a divulgação e inscrição nos torneios de **EA Sports FC 26** e **Mortal Kombat 11**, realizados durante a 14ª Edição do Encontro de Tecnologia (ENTEC) da UNINASSAU Campina Grande. 
+Esta é a versão adaptada em Node.js/Express da landing page dos torneios de E-Sports da ENTEC 2026, desenvolvida como requisito avaliativo para o componente de BEF (Ciência da Computação - UNINASSAU). 
 
-O projeto apresenta uma interface imersiva com forte inspiração no **Design Brutalista**, estética retrô-gamer e microinterações exclusivas para navegadores desktop e dispositivos móveis.
+**Repositório Original (Versão Estática):** [AugustoCGM/Entec_Main](https://github.com/AugustoCGM/Entec_Main.git)
 
----
+## 📌 Sobre a Adaptação
 
-## ✨ Funcionalidades e Efeitos
+O código original foi refatorado para deixar de ser uma simples página estática e passar a ser servido por uma aplicação backend robusta. A arquitetura foi dividida para cumprir estritamente dois requisitos acadêmicos:
 
-- **Carrossel Dinâmico (Hero):** Sistema de slides customizado com transições matemáticas, ancoragem de logos flutuantes e suporte completo a *swipe* (arrastar) em dispositivos móveis.
-- **Rastro de Luz Tátil (Neon Trail):** Efeito exclusivo para mobile desenhado do zero com JavaScript e trigonometria, que cria uma "lâmina" de luz contínua neon ao arrastar o dedo pela seção principal.
-- **Cursor em Pixel Art:** Substituição do cursor padrão do sistema operacional por uma *pixel art* temática (com variação ao passar sobre elementos clicáveis), restrito de forma inteligente apenas para telas não-táteis.
-- **Renders Animados:** Rotação automatizada e fluida de personagens (lutadores do MK11 e jogadores do FC26) com efeitos de entrada e saída laterais.
-- **Floating Action Button (FAB):** Menu flutuante interativo e animado que revela acessos rápidos para as páginas de inscrição e perfis do Instagram.
-- **Design Brutalista:** Uso de padrões quadriculados, bordas duras, cores saturadas de alto contraste (Magenta, Azul, Verde) e sombras sólidas típicas do neo-brutalismo.
+1. **Roteamento Modular:** Utilização da classe `express.Router()` para criar três agrupamentos de rotas (MK11, EA FC e Evento), fragmentando a API por tipo de recurso.
+2. **Arquivos Estáticos:** Implementação de middlewares `express.static()` para expor diretórios independentes (`/css`, `/js`, `/html`, `/assets`), garantindo que o layout neo-brutalista e os scripts de animação sejam carregados corretamente pela raiz da aplicação.
 
----
+## 🚀 Tecnologias Utilizadas
 
-## 🛠️ Tecnologias Utilizadas
+* **Backend:** Node.js, Express
+* **Frontend:** HTML5, CSS3, JavaScript Vanilla
+* **Estilização:** Tailwind CSS (via CDN), Design Neo-Brutalista
+* **Animações:** Lógica de frame-by-frame em JS, CSS Marquee, Pixel Art UI
 
-O projeto foi construído com uma abordagem *Vanilla* otimizada para carregamento rápido, sem depender de frameworks JavaScript pesados.
+## 📂 Estrutura de Pastas
 
-- **HTML5:** Semântica e estrutura.
-- **CSS3:** Animações (`@keyframes`), variáveis dinâmicas e cálculos precisos de estado.
-- **Vanilla JavaScript:** Lógica dos carrosséis, manipulação do DOM e interceptação de eventos táteis/geometria de toque.
-- **Tailwind CSS (via CDN):** Prototipagem ágil do layout responsivo e utilitários de espaçamento/tipografia.
-- **Lucide Icons:** Biblioteca de ícones SVG leves.
-- **Space Grotesk:** Fonte tipográfica principal (Google Fonts).
+```text
+/
+├── server.js               # Ponto de entrada e configuração do Express
+├── package.json            # Dependências do Node.js
+└── public/                 # Diretórios expostos estaticamente
+    ├── assets/             # Imagens, renders e logos
+    ├── css/                
+    │   ├── animations.css  # Animações contínuas e marquee
+    │   ├── brutalism.css   # Sombras duras e utilitários visuais
+    │   └── style.css       # Variáveis de cor, tipografia Space Grotesk e Cursor
+    ├── html/               
+    │   ├── index.html      # Landing page principal
+    │   ├── regras-eafc.html
+    │   └── regras-mk11.html
+    └── js/                 
+        ├── cursor.js       # Lógica do cursor interativo em pixel art
+        ├── fab.js          # Ações do botão flutuante
+        └── script.js       # Carrossel, touch/swipe e troca de renders
 
----
 
-## 🚀 Como Executar o Projeto
+⚙️ Como Executar o Projeto
+Certifique-se de ter o Node.js instalado em sua máquina.
 
-Como a aplicação é estática (*Client-Side* absoluto), não é necessário nenhum ambiente complexo (Node.js, npm, etc).
+1 - Clone este repositório:
+git clone [https://github.com/AugustoCGM/Entec_Adaptado_Expres_E_EstudoDeRotas.git](https://github.com/AugustoCGM/Entec_Adaptado_Expres_E_EstudoDeRotas.git)
 
-1. Clone o repositório para a sua máquina:
-   ```bash
-   git clone [https://github.com/seu-usuario/nome-do-repositorio.git](https://github.com/seu-usuario/nome-do-repositorio.git)
+2 - Acesse a pasta do projeto:
+cd Entec_Adaptado_Expres_E_EstudoDeRotas
+
+3 - Instale as dependências (Express):
+npm install
+
+4 - Inicie o servidor:
+npm start
+
+5 - Acesse no navegador:http://localhost:3000
