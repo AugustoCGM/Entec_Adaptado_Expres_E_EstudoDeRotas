@@ -1,9 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // ==========================================
-    // CURSOR CUSTOMIZADO (PIXEL ART)
-    // ==========================================
     const customCursor = document.getElementById('custom-cursor');
-    
+
     if (customCursor) {
         document.addEventListener('mousemove', (e) => {
             customCursor.style.left = e.clientX + 'px';

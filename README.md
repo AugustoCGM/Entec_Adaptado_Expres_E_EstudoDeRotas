@@ -1,59 +1,100 @@
-# ENTEC 2026 E-Sports - Servidor Express (Atividade AT2)
+# ENTEC UNINASSAU 2026
 
-Esta é a versão adaptada em Node.js/Express da landing page dos torneios de E-Sports da ENTEC 2026, desenvolvida como requisito avaliativo para o componente de BEF (Ciência da Computação - UNINASSAU). 
+Aplicação web para divulgar o evento ENTEC UNINASSAU 2026 e gerenciar inscrições das duplas nos torneios de EA Sports FC 26 e Mortal Kombat 11.
 
-**Repositório Original (Versão Estática):** [AugustoCGM/Entec_Main](https://github.com/AugustoCGM/Entec_Main.git)
+## Funcionalidades
 
-## 📌 Sobre a Adaptação
+- Página inicial com informações dos torneios e contadores de inscrições.
+- Regulamento específico para EA Sports FC 26.
+- Regulamento específico para Mortal Kombat 11.
+- Cadastro de duplas para cada torneio.
+- Listagem de duplas inscritas.
+- Edição e exclusão de inscrições.
+- Endpoints informativos sobre local, tema e contato do evento.
 
-O código original foi refatorado para deixar de ser uma simples página estática e passar a ser servido por uma aplicação backend robusta. A arquitetura foi dividida para cumprir estritamente dois requisitos acadêmicos:
+## Tecnologias
 
-1. **Roteamento Modular:** Utilização da classe `express.Router()` para criar três agrupamentos de rotas (MK11, EA FC e Evento), fragmentando a API por tipo de recurso.
-2. **Arquivos Estáticos:** Implementação de middlewares `express.static()` para expor diretórios independentes (`/css`, `/js`, `/html`, `/assets`), garantindo que o layout neo-brutalista e os scripts de animação sejam carregados corretamente pela raiz da aplicação.
+- **Node.js:** execução da aplicação no servidor.
+- **Express:** servidor HTTP, middlewares e roteamento.
+- **Express Handlebars:** renderização das páginas dinâmicas.
+- **Sequelize:** modelagem e acesso ao banco de dados.
+- **SQLite:** persistência local das inscrições.
+- **HTML5:** estrutura das páginas.
+- **CSS3:** layout, animações e design neo-brutalista.
+- **JavaScript:** interações no navegador e animações.
+- **Tailwind CSS:** utilitários visuais carregados pelo CDN.
 
-## 🚀 Tecnologias Utilizadas
-
-* **Backend:** Node.js, Express
-* **Frontend:** HTML5, CSS3, JavaScript Vanilla
-* **Estilização:** Tailwind CSS (via CDN), Design Neo-Brutalista
-* **Animações:** Lógica de frame-by-frame em JS, CSS Marquee, Pixel Art UI
-
-## 📂 Estrutura de Pastas
+## Estrutura
 
 ```text
 /
-├── server.js               # Ponto de entrada e configuração do Express
-├── package.json            # Dependências do Node.js
-└── public/                 # Diretórios expostos estaticamente
-    ├── assets/             # Imagens, renders e logos
-    ├── css/                
-    │   ├── animations.css  # Animações contínuas e marquee
-    │   ├── brutalism.css   # Sombras duras e utilitários visuais
-    │   └── style.css       # Variáveis de cor, tipografia Space Grotesk e Cursor
-    ├── html/               
-    │   ├── index.html      # Landing page principal
-    │   ├── regras-eafc.html
-    │   └── regras-mk11.html
-    └── js/                 
-        ├── cursor.js       # Lógica do cursor interativo em pixel art
-        ├── fab.js          # Ações do botão flutuante
-        └── script.js       # Carrossel, touch/swipe e troca de renders
-
+├── server.js                 # Inicialização do Express e configuração do Handlebars
+├── config/
+│   └── database.js           # Conexão Sequelize com SQLite
+├── models/
+│   └── Inscricao.js          # Modelo das inscrições
+├── routes/
+│   ├── eafc.js               # CRUD e regras do EA FC 26
+│   ├── mk11.js               # CRUD e regras do MK11
+│   └── evento.js             # Informações do evento
+├── views/
+│   ├── layouts/main.handlebars
+│   ├── home.handlebars
+│   ├── inscricoes.handlebars
+│   ├── regras-eafc.handlebars
+│   └── regras-mk11.handlebars
+└── public/
+    ├── assets/
+    ├── css/
+    └── js/
 ```
 
-⚙️ Como Executar o Projeto
-Certifique-se de ter o Node.js instalado em sua máquina.
+## Pré-requisitos
 
-1 - Clone este repositório:
-git clone [https://github.com/AugustoCGM/Entec_Adaptado_Expres_E_EstudoDeRotas.git](https://github.com/AugustoCGM/Entec_Adaptado_Expres_E_EstudoDeRotas.git)
+- Node.js 18 ou superior.
+- npm.
 
-2 - Acesse a pasta do projeto:
-cd Entec_Adaptado_Expres_E_EstudoDeRotas
+## Instalação e execução
 
-3 - Instale as dependências (Express):
+```powershell
 npm install
-
-4 - Inicie o servidor:
 npm start
+```
 
-5 - Acesse no navegador:http://localhost:3000
+Abra `http://localhost:3000` no navegador.
+
+O banco SQLite fica em `database.sqlite` e é criado ou atualizado automaticamente pelo Sequelize na inicialização. Os dados não são apagados quando o servidor reinicia.
+
+## Rotas
+
+| Método | Rota | Descrição |
+|---|---|---|
+| GET | `/` | Página inicial |
+| GET | `/eafc/regras` | Regulamento EA FC 26 |
+| GET | `/eafc/inscritos` | Inscrições EA FC 26 |
+| POST | `/eafc/inscrever` | Criar inscrição EA FC 26 |
+| POST | `/eafc/editar/:id` | Editar inscrição EA FC 26 |
+| POST | `/eafc/deletar/:id` | Excluir inscrição EA FC 26 |
+| GET | `/mk11/regras` | Regulamento Mortal Kombat 11 |
+| GET | `/mk11/inscritos` | Inscrições Mortal Kombat 11 |
+| POST | `/mk11/inscrever` | Criar inscrição MK11 |
+| POST | `/mk11/editar/:id` | Editar inscrição MK11 |
+| POST | `/mk11/deletar/:id` | Excluir inscrição MK11 |
+| GET | `/evento/local` | Informações de local e horário |
+| GET | `/evento/tema` | Informações sobre a edição e tema |
+| GET | `/evento/contato` | Contatos e organização |
+
+## Banco de dados
+
+O modelo `Inscricao` possui os seguintes campos:
+
+- `jogo`: EAFC26 ou MK11.
+- `nomeDupla`.
+- `jogador1`.
+- `jogador2`.
+- `contato`.
+- `status`: Pendente por padrão.
+
+## Desenvolvimento
+
+Os arquivos estáticos são disponibilizados pelas rotas `/assets`, `/css` e `/js`. O servidor valida campos obrigatórios nas operações de cadastro e edição.

@@ -1,46 +1,94 @@
 const express = require('express');
 const path = require('path');
+const { engine } = require('express-handlebars');
+
+const sequelize = require('./config/database');
+const Inscricao = require('./models/Inscricao');
+
+const rotasMK = require('./routes/mk11');
+const rotasFC = require('./routes/eafc');
+const rotasEntec = require('./routes/evento');
+
 const app = express();
 const port = 3000;
 
-app.use('/estilos', express.static(path.join(__dirname, 'public/css')));
-app.use('/scripts', express.static(path.join(__dirname, 'public/js')));
-app.use('/paginas', express.static(path.join(__dirname, 'public/html')));
+// ==========================================
+// 1. CONFIGURAÇÃO DO HANDLEBARS
+// ==========================================
+app.engine('handlebars', engine({
+    defaultLayout: 'main',
+    helpers: {
+        eq: (a, b) => a === b
+    },
+    runtimeOptions: {
+        allowProtoPropertiesByDefault: true,
+        allowProtoMethodsByDefault: true
+    }
+}));
+app.set('view engine', 'handlebars');
+app.set('views', path.join(__dirname, 'views'));
+
+// ==========================================
+// 2. MIDDLEWARES (FORMULÁRIOS E ESTÁTICOS)
+// ==========================================
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+app.use('/css', express.static(path.join(__dirname, 'public/css')));
+app.use('/js', express.static(path.join(__dirname, 'public/js')));
 app.use('/assets', express.static(path.join(__dirname, 'public/assets')));
 
-// Rota principal para servir a Landing Page da ENTEC
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public/html/index.html'));
+// ==========================================
+// 3. ROTA PRINCIPAL (LANDING PAGE DINÂMICA)
+// ==========================================
+app.get('/', async (req, res, next) => {
+    try {
+        const [totalMK, totalFC] = await Promise.all([
+            Inscricao.count({ where: { jogo: 'MK11' } }),
+            Inscricao.count({ where: { jogo: 'EAFC26' } })
+        ]);
+
+        res.render('home', {
+            titulo: 'ENTEC UNINASSAU 2026',
+            totalMK,
+            totalFC
+        });
+    } catch (err) {
+        next(err);
+    }
 });
 
 // ==========================================
-// GRUPAMENTOS DE ROTAS (ROUTERS)
+// 4. GRUPAMENTOS DE ROTAS
 // ==========================================
-
-// --- Grupo de Rotas 1: Mortal Kombat 11 ---
-const rotasMK = express.Router();
-rotasMK.get('/regras', (req, res) => res.json({ titulo: "Regras MK11", formato: "Tag Team (Duplas)" }));
-rotasMK.get('/chaveamento', (req, res) => res.json({ status: "Chaves em formação" }));
-rotasMK.get('/inscritos', (req, res) => res.json({ total: 16 }));
-
-// --- Grupo de Rotas 2: EA FC 26 ---
-const rotasFC = express.Router();
-rotasFC.get('/regras', (req, res) => res.json({ titulo: "Regras EA FC 26", formato: "Co-op (2v2)" }));
-rotasFC.get('/chaveamento', (req, res) => res.json({ status: "Fase de grupos" }));
-rotasFC.get('/inscritos', (req, res) => res.json({ total: 32 }));
-
-// --- Grupo de Rotas 3: Informações da ENTEC ---
-const rotasEntec = express.Router();
-rotasEntec.get('/local', (req, res) => res.json({ local: "UNINASSAU", horario: "18h às 21h" }));
-rotasEntec.get('/tema', (req, res) => res.json({ edicao: "14ª", tema: "IA no fluxo de DEVOPS" }));
-rotasEntec.get('/contato', (req, res) => res.json({ instagram: "@uninassau.cg e @jamlabsdev" }));
-
-// Vinculando os roteadores à aplicação principal
 app.use('/mk11', rotasMK);
 app.use('/eafc', rotasFC);
 app.use('/evento', rotasEntec);
 
-// Inicialização do servidor
-app.listen(port, () => {
-    console.log(`Landing Page ENTEC 2026 rodando em http://localhost:${port}`);
+// ==========================================
+// 5. TRATAMENTO DE ROTAS E ERROS
+// ==========================================
+app.use((req, res) => {
+    res.status(404).send('Página não encontrada');
 });
+
+app.use((err, req, res, next) => {
+    console.error('Erro na aplicação:', err);
+    res.status(err.status || 500).send(
+        err.status === 400 ? err.message : 'Erro interno do servidor'
+    );
+});
+
+// ==========================================
+// 6. SINCRONIZAÇÃO COM O BANCO E START
+// ==========================================
+sequelize.sync()
+    .then(() => {
+        console.log('Banco SQLite sincronizado com sucesso.');
+        app.listen(port, () => {
+            console.log(`Servidor ENTEC 2026 rodando em http://localhost:${port}`);
+        });
+    })
+    .catch((err) => {
+        console.error('Erro ao conectar com o banco de dados:', err);
+    });

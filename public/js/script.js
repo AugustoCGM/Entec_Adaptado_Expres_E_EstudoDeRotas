@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-    lucide.createIcons();
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
 
-    // ===============================
-    // CARROSSEL HERO E EFEITOS TOUCH 
-    // ===============================
+    // Carrossel Hero e Efeitos Touch
     const heroSection = document.getElementById('hero-section');
     const heroTrack = document.getElementById('hero-track');
     const prevHero = document.getElementById('prev-hero');
@@ -15,8 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const slides = heroTrack.children;
         const totalSlides = slides.length;
         let currentHeroSlide = 0;
-        
-        let heroAutoPlay = null; 
+        let heroAutoPlay = null;
         const AUTO_PLAY_DELAY = 10000;
 
         function startAutoPlay() {
@@ -60,23 +59,19 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const goToHeroSlide = (index, manual = false) => {
-            if (index < 0) index = totalSlides - 1; 
-            if (index >= totalSlides) index = 0;    
-            
+            if (index < 0) index = totalSlides - 1;
+            if (index >= totalSlides) index = 0;
             currentHeroSlide = index;
             heroTrack.style.transform = `translateX(-${currentHeroSlide * 100}%)`;
-            updateHeroUI(); 
-            
-            if (manual) {
-                startAutoPlay();
-            }
+            updateHeroUI();
+            if (manual) startAutoPlay();
         };
 
         if (prevHero) prevHero.addEventListener('click', () => {
             stopAutoPlay();
             goToHeroSlide(currentHeroSlide - 1, true);
         });
-        
+
         if (nextHero) nextHero.addEventListener('click', () => {
             stopAutoPlay();
             goToHeroSlide(currentHeroSlide + 1, true);
@@ -88,41 +83,39 @@ document.addEventListener('DOMContentLoaded', () => {
         heroTrack.parentElement.addEventListener('mouseenter', stopAutoPlay);
         heroTrack.parentElement.addEventListener('mouseleave', startAutoPlay);
 
-        // SWIPE
         let touchStartX = 0;
         let touchEndX = 0;
 
         heroTrack.addEventListener('touchstart', e => {
             touchStartX = e.changedTouches[0].screenX;
             stopAutoPlay();
-        }, {passive: true});
+        }, { passive: true });
 
         heroTrack.addEventListener('touchend', e => {
             touchEndX = e.changedTouches[0].screenX;
             if (touchEndX < touchStartX - 50) {
-                goToHeroSlide(currentHeroSlide + 1, true); 
+                goToHeroSlide(currentHeroSlide + 1, true);
             } else if (touchEndX > touchStartX + 50) {
-                goToHeroSlide(currentHeroSlide - 1, true); 
+                goToHeroSlide(currentHeroSlide - 1, true);
             } else {
                 startAutoPlay();
             }
-        }, {passive: true});
+        }, { passive: true });
 
-        // RASTRO DE LUZ
         let lastTouchX = null;
         let lastTouchY = null;
 
         if (heroSection) {
             heroSection.addEventListener('touchstart', (e) => {
-                if(window.matchMedia("(pointer: coarse)").matches) {
+                if (window.matchMedia("(pointer: coarse)").matches) {
                     const rect = heroSection.getBoundingClientRect();
                     lastTouchX = e.touches[0].clientX - rect.left;
                     lastTouchY = e.touches[0].clientY - rect.top;
                 }
-            }, {passive: true});
+            }, { passive: true });
 
             heroSection.addEventListener('touchmove', (e) => {
-                if(window.matchMedia("(pointer: coarse)").matches) {
+                if (window.matchMedia("(pointer: coarse)").matches) {
                     const rect = heroSection.getBoundingClientRect();
                     const currentX = e.touches[0].clientX - rect.left;
                     const currentY = e.touches[0].clientY - rect.top;
@@ -143,12 +136,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                             const inner = document.createElement('div');
                             inner.classList.add('touch-trail-inner');
-                            
                             segment.appendChild(inner);
                             heroSection.appendChild(segment);
 
                             setTimeout(() => { segment.remove(); }, 400);
-
                             lastTouchX = currentX;
                             lastTouchY = currentY;
                         }
@@ -157,18 +148,18 @@ document.addEventListener('DOMContentLoaded', () => {
                         lastTouchY = currentY;
                     }
                 }
-            }, {passive: true});
+            }, { passive: true });
 
             heroSection.addEventListener('touchend', () => {
                 lastTouchX = null;
                 lastTouchY = null;
-            }, {passive: true});
+            }, { passive: true });
         }
     }
 
-    // ANIMAÇÃO EA FC 26
+    // Animação EA FC 26
     const fcPlayerRender = document.getElementById('fc-player-render');
-    if(fcPlayerRender) {
+    if (fcPlayerRender) {
         const renderPoolFC = [
             '/assets/render-vini.png',
             '/assets/render-marta.png',
@@ -182,7 +173,6 @@ document.addEventListener('DOMContentLoaded', () => {
         setInterval(() => {
             fcPlayerRender.style.opacity = '0';
             fcPlayerRender.style.transform = 'translateX(-60px) scale(0.95)';
-            
             setTimeout(() => {
                 currentIndexFC = (currentIndexFC + 1) % renderPoolFC.length;
                 fcPlayerRender.src = renderPoolFC[currentIndexFC];
@@ -192,13 +182,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 fcPlayerRender.style.transition = 'all 0.6s ease-out';
                 fcPlayerRender.style.opacity = '1';
                 fcPlayerRender.style.transform = 'translateX(0px) scale(1)';
-            }, 600); 
-        }, 4000); 
+            }, 600);
+        }, 4000);
     }
 
-    // ANIMAÇÃO MORTAL KOMBAT 11
+    // Animação Mortal Kombat 11
     const mkPlayerRender = document.getElementById('mk-player-render');
-    if(mkPlayerRender) {
+    if (mkPlayerRender) {
         const renderPoolMK = [
             '/assets/full-1.png',
             '/assets/full-2.png',
@@ -212,7 +202,6 @@ document.addEventListener('DOMContentLoaded', () => {
         setInterval(() => {
             mkPlayerRender.style.opacity = '0';
             mkPlayerRender.style.transform = 'translateX(60px) scale(0.95)';
-            
             setTimeout(() => {
                 currentIndexMK = (currentIndexMK + 1) % renderPoolMK.length;
                 mkPlayerRender.src = renderPoolMK[currentIndexMK];
@@ -222,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 mkPlayerRender.style.transition = 'all 0.6s ease-out';
                 mkPlayerRender.style.opacity = '1';
                 mkPlayerRender.style.transform = 'translateX(0px) scale(1)';
-            }, 600); 
-        }, 4500); 
+            }, 600);
+        }, 4500);
     }
 });
